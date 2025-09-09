@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 SERVER_HOST = "localhost"
-SERVER_PORT = 8000
+SERVER_PORT = 8080
 FLIGHT_BOOKING_AGENT_URL = os.getenv("A2A_SERVER_URL")
 
 # Initialize FastAPI app
