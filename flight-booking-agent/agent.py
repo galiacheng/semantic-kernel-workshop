@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from dotenv import load_dotenv
 
-from agent_framework import ChatAgent
+from agent_framework import ChatClientAgent
 from agent_framework.azure import AzureChatClient
 from azure.identity import AzureCliCredential
 

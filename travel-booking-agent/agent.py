@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from pydantic import Field
 
-from agent_framework import ChatAgent
+from agent_framework import ChatClientAgent
 from agent_framework.azure import AzureChatClient
 from azure.identity import AzureCliCredential
 
@@ -85,7 +85,7 @@ def book_flight(user_input: Annotated[str, Field(description="The user's flight 
     return asyncio.run(_book_flight_async())
 
 
-def create_travel_agent() -> ChatAgent:
+def create_travel_agent() -> ChatClientAgent:
     """Create and configure the travel planning agent."""
     client = AzureChatClient(credential=AzureCliCredential())
     return client.create_agent(
