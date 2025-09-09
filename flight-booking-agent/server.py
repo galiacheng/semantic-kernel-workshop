@@ -24,7 +24,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Server configuration
-SERVER_HOST = "0.0.0.0"
+SERVER_HOST = "localhost"
 SERVER_PORT = 9999
 
 

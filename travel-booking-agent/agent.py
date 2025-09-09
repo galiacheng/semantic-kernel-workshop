@@ -27,7 +27,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Configuration
-SERVER_HOST = "0.0.0.0"
+SERVER_HOST = "localhost"
 SERVER_PORT = 8000
 FLIGHT_BOOKING_AGENT_URL = os.getenv("A2A_SERVER_URL")
 
