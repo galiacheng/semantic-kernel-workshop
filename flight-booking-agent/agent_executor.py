@@ -4,20 +4,20 @@ from a2a.server.agent_execution import AgentExecutor, RequestContext
 from a2a.server.events import EventQueue
 from a2a.utils import new_agent_text_message, new_task
 
-from agent import SemanticKernelFlightBookingAgent
+from agent import MicrosoftAgentFrameworkFlightBookingAgent
 
 logger = logging.getLogger(__name__)
 
 
-class SemanticKernelFlightBookingAgentExecutor(AgentExecutor):
-    """Executor for SemanticKernelFlightBookingAgent that handles A2A protocol integration."""
+class MicrosoftAgentFrameworkFlightBookingAgentExecutor(AgentExecutor):
+    """Executor for MicrosoftAgentFrameworkFlightBookingAgent that handles A2A protocol integration."""
 
     def __init__(self):
         """Initialize the executor with a flight booking agent instance."""
-        logger.info("Initializing SemanticKernelFlightBookingAgentExecutor.")
-        self.agent = SemanticKernelFlightBookingAgent()
+        logger.info("Initializing MicrosoftAgentFrameworkFlightBookingAgentExecutor.")
+        self.agent = MicrosoftAgentFrameworkFlightBookingAgent()
         logger.info(
-            "SemanticKernelFlightBookingAgentExecutor initialized successfully.")
+            "MicrosoftAgentFrameworkFlightBookingAgentExecutor initialized successfully.")
 
     async def execute(
         self,

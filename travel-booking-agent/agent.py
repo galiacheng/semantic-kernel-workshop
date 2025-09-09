@@ -1,18 +1,18 @@
 import os
 import logging
 from uuid import uuid4
+from typing import Annotated
 
 import httpx
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
+from pydantic import Field
 
-from semantic_kernel.agents.chat_completion.chat_completion_agent import ChatCompletionAgent, ChatHistoryAgentThread
-from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-from semantic_kernel.contents.chat_message_content import ChatMessageContent
-from semantic_kernel.contents.chat_history import ChatHistory
-from semantic_kernel.functions.kernel_function_decorator import kernel_function
+from agent_framework import ChatAgent
+from agent_framework.azure import AzureChatClient
+from azure.identity import AzureCliCredential
 
 from a2a.client import A2ACardResolver, A2AClient
 from a2a.types import MessageSendParams, SendMessageRequest
@@ -36,26 +36,20 @@ app = FastAPI(title="Travel Booking Agent",
               description="A travel planning assistant with flight booking capabilities")
 
 # Global chat history store
-chat_history_store: dict[str, ChatHistory] = {}
+chat_history_store: dict[str, dict] = {}
 
 
-class FlightBookingTool:
-    """Tool for booking flights using the flight booking agent."""
+def book_flight(user_input: Annotated[str, Field(description="The user's flight booking request")]) -> str:
+    """
+    Book a flight using the external flight booking agent.
 
-    @kernel_function(
-        description="Book a flight using the flight booking agent",
-        name="book_flight"
-    )
-    async def book_flight(self, user_input: str) -> str:
-        """
-        Book a flight using the external flight booking agent.
+    Args:
+        user_input: The user's flight booking request
 
-        Args:
-            user_input: The user's flight booking request
-
-        Returns:
-            The response from the flight booking agent
-        """
+    Returns:
+        The response from the flight booking agent
+    """
+    async def _book_flight_async():
         try:
             async with httpx.AsyncClient() as httpx_client:
                 resolver = A2ACardResolver(
@@ -86,36 +80,35 @@ class FlightBookingTool:
         except Exception as e:
             logger.error(f"Error booking flight: {e}")
             return f"Sorry, I encountered an error while trying to book your flight: {str(e)}"
+    
+    import asyncio
+    return asyncio.run(_book_flight_async())
 
 
-def create_travel_agent() -> ChatCompletionAgent:
+def create_travel_agent() -> ChatAgent:
     """Create and configure the travel planning agent."""
-    return ChatCompletionAgent(
-        service=AzureChatCompletion(),
-        name="TravelPlanner",
+    client = AzureChatClient(credential=AzureCliCredential())
+    return client.create_agent(
         instructions=(
             "You are a helpful travel planning assistant. "
             "Use the provided tools to assist users with their travel plans. "
             "When users ask about flights, use the book_flight tool to help them."
         ),
-        plugins=[FlightBookingTool()]
+        tools=[book_flight]
     )
 
 
-def get_or_create_chat_history(context_id: str) -> ChatHistory:
+def get_or_create_chat_history(context_id: str) -> dict:
     """Get existing chat history or create a new one for the given context."""
     chat_history = chat_history_store.get(context_id)
 
     if chat_history is None:
-        chat_history = ChatHistory(
-            messages=[],
-            system_message=(
-                "You are a travel planning assistant. "
-                "Your task is to help the user with their travel plans, including booking flights."
-            )
-        )
+        chat_history = {
+            "messages": [],
+            "thread": None
+        }
         chat_history_store[context_id] = chat_history
-        logger.info(f"Created new ChatHistory for context ID: {context_id}")
+        logger.info(f"Created new chat history for context ID: {context_id}")
 
     return chat_history
 
@@ -143,24 +136,16 @@ async def chat(user_input: str = Form(...), context_id: str = Form("default")):
         # Get or create chat history for the context
         chat_history = get_or_create_chat_history(context_id)
 
-        # Add user input to chat history
-        chat_history.messages.append(
-            ChatMessageContent(role="user", content=user_input))
+        # Get or create thread for this context
+        if chat_history["thread"] is None:
+            chat_history["thread"] = travel_planning_agent.get_new_thread()
 
-        # Create a new thread from the chat history
-        thread = ChatHistoryAgentThread(
-            chat_history=chat_history, thread_id=str(uuid4()))
+        # Get response from the agent using the unified run API
+        response = await travel_planning_agent.run(user_input, thread=chat_history["thread"])
 
-        # Get response from the agent
-        response = await travel_planning_agent.get_response(message=user_input, thread=thread)
+        logger.info(f"Travel agent response: {response.text}")
 
-        # Add assistant response to chat history
-        chat_history.messages.append(ChatMessageContent(
-            role="assistant", content=response.content.content))
-
-        logger.info(f"Travel agent response: {response.content.content}")
-
-        return {"response": response.content.content}
+        return {"response": response.text}
 
     except Exception as e:
         logger.error(f"Error processing chat request: {e}")

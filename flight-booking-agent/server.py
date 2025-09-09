@@ -12,7 +12,7 @@ from a2a.types import (
     AgentCard,
     AgentSkill,
 )
-from agent_executor import SemanticKernelFlightBookingAgentExecutor
+from agent_executor import MicrosoftAgentFrameworkFlightBookingAgentExecutor
 
 load_dotenv('../../.env')
 
@@ -45,8 +45,8 @@ def create_flight_booking_skill() -> AgentSkill:
 def create_agent_card() -> AgentCard:
     """Create and return the agent card configuration."""
     return AgentCard(
-        name='Semantic Kernel Flight Booking Agent',
-        description='An agent that helps users book flights using semantic kernel capabilities.',
+        name='Microsoft Agent Framework Flight Booking Agent',
+        description='An agent that helps users book flights using Microsoft Agent Framework capabilities.',
         capabilities=AgentCapabilities(streaming=True),
         url=os.environ.get('A2A_SERVER_URL'),
         version='1.0.0',
@@ -61,7 +61,7 @@ def create_server() -> A2AStarletteApplication:
     """Create and configure the A2A server application."""
     # Initialize request handler with the flight booking agent executor
     request_handler = DefaultRequestHandler(
-        agent_executor=SemanticKernelFlightBookingAgentExecutor(),
+        agent_executor=MicrosoftAgentFrameworkFlightBookingAgentExecutor(),
         task_store=InMemoryTaskStore(),
     )
 
@@ -74,7 +74,7 @@ def create_server() -> A2AStarletteApplication:
 
 def main() -> None:
     """Main entry point for the flight booking agent server."""
-    logger.info("Starting Semantic Kernel Flight Booking Agent Server.")
+    logger.info("Starting Microsoft Agent Framework Flight Booking Agent Server.")
 
     server = create_server()
 

@@ -4,10 +4,9 @@ from uuid import uuid4
 
 from dotenv import load_dotenv
 
-from semantic_kernel.agents.chat_completion.chat_completion_agent import ChatCompletionAgent, ChatHistoryAgentThread
-from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-from semantic_kernel.contents.chat_message_content import ChatMessageContent
-from semantic_kernel.contents.chat_history import ChatHistory
+from agent_framework import ChatAgent
+from agent_framework.azure import AzureChatClient
+from azure.identity import AzureCliCredential
 
 load_dotenv('../.env')
 
@@ -19,16 +18,15 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-class SemanticKernelFlightBookingAgent:
-    """A flight booking agent using Semantic Kernel and Azure OpenAI."""
+class MicrosoftAgentFrameworkFlightBookingAgent:
+    """A flight booking agent using Microsoft Agent Framework and Azure OpenAI."""
 
     def __init__(self):
         """Initialize the flight booking agent with Azure OpenAI service."""
-        logger.info("Initializing SemanticKernelFlightBookingAgent.")
+        logger.info("Initializing MicrosoftAgentFrameworkFlightBookingAgent.")
 
-        self.chat_agent = ChatCompletionAgent(
-            service=AzureChatCompletion(),
-            name="FlightBookingAssistant",
+        client = AzureChatClient(credential=AzureCliCredential())
+        self.chat_agent = client.create_agent(
             instructions=(
                 "You are a helpful flight booking assistant. "
                 "Your task is to help users book flights by gathering necessary information "
@@ -38,32 +36,22 @@ class SemanticKernelFlightBookingAgent:
             )
         )
 
-        # Store chat history per context to maintain conversation state
-        self.history_store: dict[str, ChatHistory] = {}
+        # Store chat threads per context to maintain conversation state
+        self.thread_store: dict[str, object] = {}
 
         logger.info(
-            "SemanticKernelFlightBookingAgent initialized successfully.")
+            "MicrosoftAgentFrameworkFlightBookingAgent initialized successfully.")
 
-    def _get_or_create_chat_history(self, context_id: str) -> ChatHistory:
-        """Get existing chat history or create a new one for the given context."""
-        chat_history = self.history_store.get(context_id)
+    def _get_or_create_thread(self, context_id: str) -> object:
+        """Get existing thread or create a new one for the given context."""
+        thread = self.thread_store.get(context_id)
 
-        if chat_history is None:
-            chat_history = ChatHistory(
-                messages=[],
-                system_message=(
-                    "You are a helpful flight booking assistant. "
-                    "Help users book flights by gathering all necessary information: "
-                    "departure city, destination city, travel dates, number of passengers, "
-                    "and preferred class. Once you have complete information, "
-                    "provide a booking confirmation summary."
-                )
-            )
-            self.history_store[context_id] = chat_history
-            logger.info(
-                f"Created new ChatHistory for context ID: {context_id}")
+        if thread is None:
+            thread = self.chat_agent.get_new_thread()
+            self.thread_store[context_id] = thread
+            logger.info(f"Created new thread for context ID: {context_id}")
 
-        return chat_history
+        return thread
 
     async def book_flight(self, user_input: str, context_id: str) -> str:
         """
@@ -87,28 +75,15 @@ class SemanticKernelFlightBookingAgent:
             raise ValueError("User input cannot be empty.")
 
         try:
-            # Get or create chat history for the context
-            chat_history = self._get_or_create_chat_history(context_id)
+            # Get or create thread for the context
+            thread = self._get_or_create_thread(context_id)
 
-            # Add user input to chat history
-            chat_history.messages.append(
-                ChatMessageContent(role="user", content=user_input))
+            # Get response from the agent using the unified run API
+            response = await self.chat_agent.run(user_input, thread=thread)
 
-            # Create a new thread from the chat history
-            thread = ChatHistoryAgentThread(
-                chat_history=chat_history, thread_id=str(uuid4()))
+            logger.info(f"Flight booking agent response: {response.text}")
 
-            # Get response from the agent
-            response = await self.chat_agent.get_response(message=user_input, thread=thread)
-
-            # Add assistant response to chat history
-            chat_history.messages.append(ChatMessageContent(
-                role="assistant", content=response.content.content))
-
-            logger.info(
-                f"Flight booking agent response: {response.content.content}")
-
-            return response.content.content
+            return response.text
 
         except Exception as e:
             logger.error(f"Error processing flight booking request: {e}")
