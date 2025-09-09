@@ -17,7 +17,7 @@ from semantic_kernel.functions.kernel_function_decorator import kernel_function
 from a2a.client import A2ACardResolver, A2AClient
 from a2a.types import MessageSendParams, SendMessageRequest
 
-load_dotenv('../../.env')
+load_dotenv('../.env')
 
 # Configure logging
 logging.basicConfig(

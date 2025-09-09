@@ -9,7 +9,7 @@ from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 from semantic_kernel.contents.chat_message_content import ChatMessageContent
 from semantic_kernel.contents.chat_history import ChatHistory
 
-load_dotenv('../../.env')
+load_dotenv('../.env')
 
 # Configure logging
 logging.basicConfig(
