@@ -1,0 +1,12 @@
+{
+  "steps": [
+    {
+      "action": "transform_code",
+      "id": "transform_code_documents_1",
+      "description": "Transform multiple code documents in a directory.",
+      "inputs": {
+        "src_paths": ["flight-booking-agent", "travel-booking-agent"]
+      }
+    }
+  ]
+}
