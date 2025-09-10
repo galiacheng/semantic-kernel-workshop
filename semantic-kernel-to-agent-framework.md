@@ -1,4 +1,7 @@
 # Keywords
+`$match:keyword="semantic_kernel"`
+`$match:keyword="Semantic Kernel"`
+`$match:keyword="SemanticKernel"`
 `$match:keyword="AzureChatCompletion"`
 `$match:keyword="OpenAIChatCompletion"`
 `$match:keyword="AzureOpenAIAssistantAgent"`
