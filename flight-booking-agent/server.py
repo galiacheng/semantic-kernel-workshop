@@ -14,7 +14,7 @@ from a2a.types import (
 )
 from agent_executor import SemanticKernelFlightBookingAgentExecutor
 
-load_dotenv('../../.env')
+load_dotenv('../.env')
 
 # Configure logging
 logging.basicConfig(
