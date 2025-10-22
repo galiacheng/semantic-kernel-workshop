@@ -21,3 +21,6 @@ dependencies = [
     "semantic-kernel==1.31.0",
     "uvicorn>=0.35.0",
 ]
+
+[tool.nose2]
+testpath = "tests"
