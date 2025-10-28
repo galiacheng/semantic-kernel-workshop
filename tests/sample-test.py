@@ -3,7 +3,7 @@ import unittest
 class TestSample(unittest.TestCase):
     def test_sample(self):
         """Test basic functionality"""
-        self.assertEqual(1 + 0, 2)
+        self.assertEqual(1 + 1, 2)
         self.assertEqual("fastapi".upper(), "FASTAPI")
     
     def test_sample1(self):
