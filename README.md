@@ -1,204 +1,186 @@
-# Semantic Kernel Workshop
+# Convert Semantic Kernel to Agent Framework Workshop
 
-A hands-on workshop exploring Microsoft's Semantic Kernel framework for building intelligent AI applications. This workshop provides practical experience with real-world AI application patterns using Python and Azure OpenAI.
+This workshop guides you through the process of migrating Python applications from Microsoft Semantic Kernel to the Microsoft Agent Framework using GitHub Copilot app modernization tools.
 
-## Workshop Overview
+## Overview
 
-This workshop takes you from foundational concepts to advanced implementation patterns through a series of Jupyter notebooks and practical examples. You'll learn how to:
+This repository contains sample applications built with Semantic Kernel that demonstrate AI-powered booking agents. The workshop will show you how to migrate these applications to use the modern Microsoft Agent Framework while maintaining the same functionality.
 
-- Build AI applications using Microsoft's Semantic Kernel framework
-- Create and orchestrate AI agents with different capabilities and roles
-- Construct structured AI workflows using the Process Framework
-- Implement enterprise-ready AI features with security and scalability in mind
+### Sample Applications
 
-## Interactive Playground Demo
-
-Experience Semantic Kernel in action through our interactive playground! This visual demonstration allows you to directly engage with the core concepts covered in the workshop.
-
-![Semantic Kernel Playground Demo](playground/assets/sk-playground.gif)
-
-The playground offers a hands-on environment where you can:
-- Test semantic functions in real-time
-- Explore agent capabilities and interactions
-- Experiment with memory and embeddings
-- Try out native plugin integration
-- See the Process Framework in action
-
-No need to wait until the end of the workshop - you can start exploring the playground at any time to reinforce concepts as you learn them!
-
-For setup instructions and details on how to run the playground, refer to the [Playground README](playground/README.md).
+This workshop includes two sample agents:
+- **Flight Booking Agent** (`flight-booking-agent/`) - A comprehensive booking system with agent executor and server components
+- **Travel Booking Agent** (`travel-booking-agent/`) - A travel planning agent with web interface
 
 ## Prerequisites
 
-- Python 3.10 or higher
-- Azure OpenAI API access (API key, endpoint, and deployment name)
-- Basic knowledge of Python programming
-- Understanding of prompt engineering concepts (helpful but not required)
-- [UV package manager](https://docs.astral.sh/uv/getting-started/installation/)
+Before starting this workshop, ensure you have:
 
-### Local Dependencies Setup
+- A GitHub account with [GitHub Copilot](https://github.com/features/copilot) enabled (Pro, Pro+, Business, or Enterprise plan required)
+- [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
+- [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
+- GitHub Copilot app modernization private build extension for Python migration (contact your workshop facilitator for the `.vsix` file)
+- [Python](https://www.python.org/downloads/) version 3.10 or later
+- [VS Code Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+- Azure OpenAI service access for running the applications
 
-The project is managed by pyproject.toml and [uv package manager](https://docs.astral.sh/uv/getting-started/installation/).
+In Visual Studio Code settings, ensure `chat.extensionTools.enabled` is set to `true`. This setting might be controlled by your organization's policy.
 
-For local execution init the .venv environment using [uv package manager](https://docs.astral.sh/uv/getting-started/installation/):
+## Setup Instructions
 
-```shell
-uv sync --prerelease=allow
-. ./.venv/bin/activate
-```
->OBS! At the time of writing the workshop depends on the prerelease libraries. 
+### 1. Sign in to GitHub Copilot
 
-## Getting Started
+First, sign in to your GitHub account in Visual Studio Code:
+1. Open Visual Studio Code
+2. Click the GitHub Copilot icon in the Activity Bar (left sidebar)
+3. Sign in to your GitHub account when prompted
+4. Verify that Copilot is active and working
 
-1. Clone this repository
+For detailed setup instructions, see [Set up GitHub Copilot in VS Code](https://code.visualstudio.com/docs/copilot/setup).
 
-1. Create a virtual environment:
-   
-   **Linux/macOS:**
-   ```bash
-   # Create a virtual environment
-   python -m venv venv
-   
-   # Activate the virtual environment
-   source venv/bin/activate
-   ```
-   
-   **Windows:**
-   ```cmd
-   # Create a virtual environment
-   python -m venv venv
-   
-   # Activate the virtual environment
-   venv\Scripts\activate
-   ```
+### 2. Install the GitHub Copilot App Modernization Extension
 
-1. Copy the environment variables template:
-   ```bash
-   cp .env.example .env
-   ```
+Install the private build extension for Python migration:
+1. In Visual Studio Code, open the Extensions view (`Ctrl+Shift+X`)
+2. Click the `...` button in the top-right corner of the Extensions panel
+3. Select "Install from VSIX..."
+4. Choose the downloaded `.vsix` file for the GitHub Copilot app modernization extension
+5. Click "Restart Extension" if prompted
 
-1. Add your Azure OpenAI credentials to the `.env` file:
-   ```
-   AZURE_OPENAI_ENDPOINT=https://xxxxxx.openai.azure.com/
-   AZURE_OPENAI_CHAT_DEPLOYMENT_NAME=gpt-4o
-   AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=text-embedding-ada-002
-   AZURE_OPENAI_API_KEY=xxxxxxxxxxx
-   AZURE_OPENAI_API_VERSION=2025-03-01-preview
-   ```
+> ⚠️ **Important**: Do NOT click "Update" for the newly installed extension, as this will replace the private build with a public version that may not have the Python migration features.
 
-1. Start with the first notebook:
-   - Begin with `01-intro-to-semantic-kernel/01-intro.ipynb`, which includes instructions for installing Semantic Kernel and other required packages.
+### 3. Clone the Workshop Repository
 
+Clone this repository to your local machine:
 
-## Workshop Modules
-
-### 01. Introduction to Semantic Kernel
-
-Learn the fundamentals of Semantic Kernel:
-- Core architectural components (Kernel, AI Services, Plugins)
-- Building semantic functions with prompts
-- Creating native functions with Python code
-- Enabling automatic function calling for AI agents
-
-**Key Notebooks:**
-- `01-intro.ipynb`: Core concepts, services, and function creation
-
-### 02. Semantic Kernel Agents
-
-Master the creation and orchestration of AI agents:
-- Creating specialized agents with different personas
-- Implementing multi-agent communication patterns
-- Agent selection strategies and orchestration
-- Building agent topologies for complex scenarios
-- Integrating plugins with agents for enhanced capabilities
-
-**Key Notebooks:**
-- `02.1-agents.ipynb`: Creating and configuring agents
-- `02.2-agents-chats.ipynb`: Inter-agent communication and complex patterns
-
-### 03. Semantic Kernel with MCP
-
-Learn to how to connect an SK Agent to MCP:
-- Running your MCP server
-- Using an Agent in Semantic Kernel to make calls to it
-
-**Key Notebooks:**
-- `03.1-sk-with-mcp.ipynb`: Semantic Kernel with MCP example
-
-### 04. Process Framework
-
-Learn to build structured, event-driven AI workflows:
-- Understanding the Process Framework architecture
-- Defining events, steps, and state management
-- Building conversational AI systems with processes
-- Implementing complex business logic with AI capabilities
-- Creating maintainable and testable AI workflows
-
-**Key Notebooks:**
-- `04.1-intro-to-processes.ipynb`: Building stateful, event-driven AI processes
-
-### 05. Semantic Kernel & Agent-to-Agent (A2A) Protocol
-
-Master advanced agent communication patterns:
-- Implementing Agent-to-Agent (A2A) communication protocols
-- Creating specialized agents that can communicate with each other
-- Building distributed AI systems with modular, reusable agents
-- Understanding A2A server components and agent cards
-- Developing production-ready agent architectures
-
-**Key Notebooks:**
-- `05-semantic-kernel-a2a-tutorial.ipynb`: Complete A2A implementation with flight booking and travel planning agents
-
-**Standalone Applications:**
-- `flight-booking-agent/`: Specialized flight booking agent server
-- `travel-booking-agent/`: Travel planning agent with web interface
-
-## Project Structure
-
-```
-semantic-kernel-workshop/
-├── 01-intro-to-semantic-kernel/    # Introduction to core concepts
-│   └── 01-intro.ipynb              # Basic concepts and functions
-├── 02-semantic-kernel-agents/      # Agent creation and orchestration
-│   ├── 02.1-single-agents.ipynb    # Agent fundamentals
-│   ├── 02.2-agents-chats.ipynb     # Multi-agent communication
-├── 03-semantic-kernel-mcp/         # Using SK with MCP
-│   └── 03.1-sk-with-mcp.ipynb      # SK + MCP example
-├── 04-process-framework/           # Structured AI workflows
-│   └── 04.1-intro-to-processes.ipynb  # Process fundamentals
-├── 05-semantic-kernel-a2a/         # Agent-to-Agent communication
-│   ├── 05-semantic-kernel-a2a-tutorial.ipynb  # Complete A2A tutorial
-│   ├── flight-booking-agent/       # Standalone flight booking agent
-│   └── travel-booking-agent/       # Standalone travel planning agent
-├── playground/                     # Interactive application
-│   ├── backend/                    # FastAPI server
-│   ├── frontend/                   # React application
-│   ├── start.sh                    # Launch script
-│   └── README.md                   # Playground documentation
-└── .env.example                 # Environment variables template
+```bash
+git clone https://github.com/galiacheng/semantic-kernel-workshop.git
+cd semantic-kernel-workshop
 ```
 
-## Learning Path
+## Migration Process
 
-For optimal learning, follow the repository's folders in numerical order.
+### Step 1: Start the Migration
 
-## Advanced Topics and Resources
+1. **Open the Project**: Open the `semantic-kernel-workshop` project in VS Code
+2. **Access the Extension**: Open the **GitHub Copilot app modernization** extension panel
+3. **Start Migration**: In the **Quick Start** panel, select **Convert to Agent Framework**
 
-For advanced patterns and enterprise deployment scenarios, explore the [Semantic Kernel Advanced Usage](https://github.com/Azure-Samples/semantic-kernel-advanced-usage) repository, which includes:
+### Step 2: Review the Migration Plan
 
-- Dapr integration for scalable, distributed systems
-- Authentication and security patterns
-- Natural language to SQL conversion
-- Copilot Studio integration
-- Microsoft Graph API integration
-- Production deployment architecture
+GitHub Copilot app modernization will analyze your Python project, including:
+- Files using Semantic Kernel APIs
+- Project dependencies and Python version requirements
+- Code structure and patterns
 
-## Additional Resources
+### Step 3: Execute the Migration
 
-- [Semantic Kernel Documentation](https://learn.microsoft.com/en-us/semantic-kernel/overview/)
-- [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service/)
-- [Microsoft Copilot Studio](https://www.microsoft.com/en-us/microsoft-copilot/microsoft-copilot-studio)
+GitHub Copilot proceeds with the automated code transformation:
 
-## License
+1. **Knowledge Base Integration**: Fetches the latest migration patterns and best practices
+2. **Code Transformation**: Systematically converts Semantic Kernel code to Agent Framework
+3. **Validation Loop**: Continuously validates changes and fixes issues automatically
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+You can monitor the progress in real-time by checking the `progress.md` file that updates throughout the process.
+
+### Step 4: Automated Validation and Fixes
+
+After code migration, the validation loop ensures:
+- ✅ **Syntax Validation**: No syntax errors in changed files
+- ✅ **Import Resolution**: All new imports are accessible and properly configured
+- ✅ **Linting**: Code follows Python best practices and style guidelines
+- ✅ **Unit Tests**: Existing tests pass or are updated to work with new framework
+
+> 💡 **Tip**: The migration process may prompt you to continue at various stages, especially for complex projects. This allows you to review intermediate results and provide feedback.
+
+### Step 5: Review the Migration Summary
+
+After completion, the tool generates a comprehensive `summary.md` file containing:
+
+- **Project Overview**: Basic project information and migration scope
+- **Files Modified**: Complete list of changed files with line counts
+- **Code Changes Summary**: High-level description of transformations made
+- **Knowledge Base Used**: Migration patterns and rules applied
+- **Validation Results**: Test results and code quality metrics
+- **Known Limitations**: Areas that may need manual follow-up or additional work
+
+## [Optional] Running the Applications
+
+After successful migration, you can run the sample applications with Azure OpenAI integration.
+
+### Azure OpenAI Setup
+
+1. **Create Azure OpenAI Resource**: Follow the guide to [Create and deploy an Azure OpenAI resource in Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/create-resource?pivots=web-portal)
+
+2. **Deploy Required Models**: Deploy the following models in your Azure OpenAI resource:
+   - **Chat Model**: `gpt-4o-2024-11-20` (or compatible version)
+   - **Embedding Model**: `text-embedding-ada-002`
+
+### Environment Configuration
+
+1. **Create Environment File**: Copy the example environment file and configure it with your Azure OpenAI credentials:
+
+```bash
+cp .env.example .env
+```
+
+2. **Configure Variables**: Edit the `.env` file with your Azure OpenAI details:
+
+```env
+# Azure OpenAI configuration
+AZURE_OPENAI_ENDPOINT=https://<your-resource-name>.openai.azure.com/
+AZURE_OPENAI_API_KEY=<your-api-key>
+AZURE_OPENAI_API_VERSION=2025-03-01-preview
+AZURE_OPENAI_CHAT_DEPLOYMENT_NAME=gpt-4o-2024-11-20
+AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=text-embedding-ada-002
+
+# Agent Framework configuration
+A2A_SERVER_URL=http://localhost:9999
+```
+
+### Activate the Environment
+
+The migration process creates a `.venv` virtual environment in the root of your project. Activate it before running the applications:
+
+```bash
+# On Windows (PowerShell)
+.\.venv\Scripts\Activate.ps1
+
+# On Windows (Command Prompt)
+.venv\Scripts\activate.bat
+
+# On macOS/Linux
+source .venv/bin/activate
+```
+
+Once activated, you should see `(.venv)` in your terminal prompt, indicating the virtual environment is active.
+
+### Running the Sample Applications
+
+#### Flight Booking Agent
+
+The flight booking agent includes a complete server setup with FastAPI:
+
+```bash
+# Navigate to the flight booking agent directory
+cd flight-booking-agent
+
+# Run the server
+python server.py
+```
+
+Access the application at `http://localhost:8000`
+
+#### Travel Booking Agent
+
+The travel booking agent provides a web-based interface:
+
+```bash
+# Navigate to the travel booking agent directory
+cd travel-booking-agent
+
+# Run the agent
+python agent.py
+```
+
+Open `index.html` in your browser to interact with the travel booking interface.
