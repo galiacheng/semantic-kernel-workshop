@@ -21,7 +21,6 @@ Before starting this workshop, ensure you have:
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
 - GitHub Copilot app modernization private build extension for Python migration (contact your workshop facilitator for the `.vsix` file)
 - [Python](https://www.python.org/downloads/) version 3.10 or later. We recommend you to install [VS Code Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-- Azure OpenAI service access for running the applications
 
 In Visual Studio Code settings, ensure `chat.extensionTools.enabled` is set to `true`. This setting might be controlled by your organization's policy.
 
