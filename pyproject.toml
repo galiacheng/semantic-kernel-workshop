@@ -3,7 +3,6 @@ name = "semantic-kernel-workshop"
 version = "0.1.0"
 description = "A workshop for Semantic Kernel"
 readme = "README.md"
-requires-python = "==3.12.*"
 dependencies = [
     "a2a-sdk>=0.2.8",
     "fastapi>=0.116.0",
