@@ -20,7 +20,7 @@ Before starting this workshop, ensure you have:
 - [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
 - GitHub Copilot app modernization private build extension for Python migration (contact your workshop facilitator for the `.vsix` file)
-- [Python](https://www.python.org/downloads/) version 3.12 or later. We recommend you to install [VS Code Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+- [Python](https://www.python.org/downloads/) version 3.13. We recommend that you install [VS Code Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 
 In Visual Studio Code settings, ensure `chat.extensionTools.enabled` is set to `true`. This setting might be controlled by your organization's policy.
 
@@ -153,6 +153,12 @@ source .venv/bin/activate
 
 Once activated, you should see `(.venv)` in your terminal prompt, indicating the virtual environment is active.
 
+Ensure all dependencies are installed.
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Running the Sample Applications
 
 #### Flight Booking Agent
@@ -167,11 +173,11 @@ cd flight-booking-agent
 python server.py
 ```
 
-Access the application at `http://localhost:8000`
+The server is up at `http://localhost:9999`, keep it running.
 
 #### Travel Booking Agent
 
-The travel booking agent provides a web-based interface:
+The travel booking agent provides a web-based interface, run the following command in a new terminal with venv activated:
 
 ```bash
 # Navigate to the travel booking agent directory
@@ -181,4 +187,6 @@ cd travel-booking-agent
 python agent.py
 ```
 
-Open `index.html` in your browser to interact with the travel booking interface.
+The agent is up at `http://localhost:8080`. 
+
+Open your browser and input a booking request as, `Book a flight from Shanghai to Beijing`.
