@@ -96,7 +96,7 @@ After code migration, the validation loop ensures:
 - ✅ **Linting**: Code follows Python best practices and style guidelines
 - ✅ **Unit Tests**: Existing tests pass or are updated to work with new framework
 
-> 💡 **Tip**: The migration process may prompt you to continue at various stages, especially for complex projects. This allows you to review intermediate results and provide feedback.
+> 💡 **Tip**: The migration process will pause at various stages to allow you to review intermediate results. When prompted, type `continue` in the chat window to proceed to the next step. Repeat this process until the final migration summary is generated.
 
 ### Step 5: Review the Migration Summary
 
