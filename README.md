@@ -19,7 +19,7 @@ Before starting this workshop, ensure you have:
 - A GitHub account with [GitHub Copilot](https://github.com/features/copilot) enabled (Pro, Pro+, Business, or Enterprise plan required)
 - [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
-- GitHub Copilot app modernization private build extension for Python migration (contact your workshop facilitator for the `.vsix` file)
+- GitHub Copilot app modernization extension with Python migration enabled (use Pre-Release version)
 - [Python](https://www.python.org/downloads/) version 3.13. We recommend that you install [VS Code Python Extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
 
 In Visual Studio Code settings, ensure `chat.extensionTools.enabled` is set to `true`. This setting might be controlled by your organization's policy.
@@ -36,16 +36,23 @@ First, sign in to your GitHub account in Visual Studio Code:
 
 For detailed setup instructions, see [Set up GitHub Copilot in VS Code](https://code.visualstudio.com/docs/copilot/setup).
 
-### 2. Install the GitHub Copilot App Modernization Extension
+### 2. Install the GitHub Copilot app modernization Extension
 
-Install the private build extension for Python migration:
-1. In Visual Studio Code, open the Extensions view (`Ctrl+Shift+X`)
-2. Click the `...` button in the top-right corner of the Extensions panel
-3. Select "Install from VSIX..."
-4. Choose the downloaded `.vsix` file for the GitHub Copilot app modernization extension
-5. Click "Restart Extension" if prompted
+Install GitHub Copilot app modernization extension:
 
-> ⚠️ **Important**: Do NOT click "Update" for the newly installed extension, as this will replace the private build with a public version that may not have the Python migration features.
+1. In Visual Studio Code, open the Extensions view from the Activity Bar.
+2. Search for **GitHub Copilot app modernization** in the marketplace.
+3. Select the extension and click **Install**.
+5. Restart Visual Studio Code.
+
+Enable the Pre-Released version for Python migration:
+1. Open the Extensions view
+2. Under **Installed** extensions, select "GitHub Copilot app modernization"
+4. Select **Switch to Pre-Release Version** and enable **Auto Update**
+5. Verify the version is `1.7.2025110601` or above (The version format is `<major>.<minor>.<date><build>`).
+5. Click "Restart Extension" to apply changes
+
+![Screenshot](./resources/install_extension.png)
 
 ### 3. Clone the Workshop Repository
 
