@@ -143,7 +143,7 @@ AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=text-embedding-ada-002
 A2A_SERVER_URL=http://localhost:9999
 ```
 
-### Create and activate the Environment
+### Activate the Environment
 
 The migration process creates a `.venv` virtual environment in the root of your project. Activate it before running the applications:
 
