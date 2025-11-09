@@ -160,9 +160,11 @@ source .venv/bin/activate
 
 Once activated, you should see `(.venv)` in your terminal prompt, indicating the virtual environment is active.
 
-Ensure all dependencies are installed.
+Ensure all dependencies are installed. It takes several minutes to install all the dependencies.
 
 ```bash
+python.exe -m pip install --upgrade pip
+pip install --pre agent-framework
 pip install -r requirements.txt
 ```
 
