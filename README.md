@@ -143,29 +143,36 @@ AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=text-embedding-ada-002
 A2A_SERVER_URL=http://localhost:9999
 ```
 
-### Activate the Environment
+### Create and activate the Environment
 
-The migration process creates a `.venv` virtual environment in the root of your project. Activate it before running the applications:
+The migration process creates a `.venv` virtual environment in the root of your project. Remove it to avoid potential conflict.
+Create a new one and activate it before running the applications:
 
 ```bash
 # On Windows (PowerShell)
+Remove-Item -Recurse -Force .venv
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 
 # On Windows (Command Prompt)
+rmdir /s /q .venv
+python -m venv .venv
 .venv\Scripts\activate.bat
 
 # On macOS/Linux
+rm -rf .venv
+python3 -m venv .venv
 source .venv/bin/activate
 ```
 
 Once activated, you should see `(.venv)` in your terminal prompt, indicating the virtual environment is active.
 
-Ensure all dependencies are installed. It takes several minutes to install all the dependencies.
+Ensure all dependencies are installed. It takes several minutes to install all the dependencies. 
 
 ```bash
 python.exe -m pip install --upgrade pip
+pip install --no-deps -r requirements.txt
 pip install --pre agent-framework
-pip install -r requirements.txt
 ```
 
 ### Running the Sample Applications
@@ -186,7 +193,7 @@ The server is up at `http://localhost:9999`, keep it running.
 
 #### Travel Booking Agent
 
-The travel booking agent provides a web-based interface, run the following command in a new terminal with venv activated:
+The travel booking agent provides a web-based interface, run the following command in a new terminal **with the venv activated**:
 
 ```bash
 # Navigate to the travel booking agent directory
