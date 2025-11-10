@@ -119,6 +119,8 @@ After successful migration, you can run the sample applications with Azure OpenA
 
 ### Azure OpenAI Setup
 
+> 💡 **Quick Start Tip**: For workshop participants who need quick access to Azure OpenAI resources, you can contact Menghua Xiao or Haixia Cheng for shared resource credentials.
+
 1. **Create Azure OpenAI Resource**: Follow the guide to [Create and deploy an Azure OpenAI resource in Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/create-resource?pivots=web-portal)
 
 2. **Deploy Required Models**: Deploy the following models in your Azure OpenAI resource:
