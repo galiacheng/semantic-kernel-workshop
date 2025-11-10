@@ -23,6 +23,7 @@ Before starting this workshop, ensure you have:
 - Python version 3.13 (verify with `python --version`). 
   - Install from [Microsoft Store](https://apps.microsoft.com/detail/9pnrbtzxmb4z)
   - Install from [Python.org](https://www.python.org/downloads/release/python-3139/)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
 - [Python extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python) (recommended)
 
 In Visual Studio Code settings, ensure `chat.extensionTools.enabled` is set to `true`. This setting might be controlled by your organization's policy.
