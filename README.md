@@ -45,16 +45,22 @@ For detailed setup instructions, see [Set up GitHub Copilot in VS Code](https://
 1. Download the GitHub Copilot app modernization extension (VSIX file) from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/1.7.2025111001-bugbash)
 
 2. Install the VSIX file in Visual Studio Code:
-   - Open Visual Studio Code
+   - In the Visual Studio Code
    - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) to open the Command Palette
    - Type "Extensions: Install from VSIX..." and select it
    - Browse to the downloaded VSIX file and select it
    - Wait for the installation to complete
    - Restart Visual Studio Code
 
-Pick up the minimal toolset:
+3. Verify the installation:
+   - Open the Extensions view (`Ctrl+Shift+X` or `Cmd+Shift+X` on macOS)
+   - Search for "GitHub Copilot app modernization"
+   - Confirm the extension is installed and enabled
+   - Verify the version is `1.7.2025111001-bugbash`
 
-![Screenshot](./resources/toolset.png)
+4. Pick up the minimal toolset:
+
+   ![Screenshot](./resources/toolset.png)
 
 > ⚠️ **Important**: Do NOT click "Update" for the newly installed extension, as this will replace the private build with a public version that may not have the Python migration features.
 
