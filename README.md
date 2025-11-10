@@ -19,7 +19,7 @@ Before starting this workshop, ensure you have:
 - A GitHub account with [GitHub Copilot](https://github.com/features/copilot) enabled (Pro, Pro+, Business, or Enterprise plan required)
 - [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
-- Download GitHub Copilot app modernization extension with Python migration enabled from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/python-bugbash-2025-11-10)
+- Download GitHub Copilot app modernization extension with Python migration enabled from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/1.7.2025111001-bugbash)
 - Python version 3.13 (verify with `python --version`). 
   - Install from [Microsoft Store](https://apps.microsoft.com/detail/9pnrbtzxmb4z)
   - Install from [Python.org](https://www.python.org/downloads/release/python-3139/)
@@ -42,7 +42,7 @@ For detailed setup instructions, see [Set up GitHub Copilot in VS Code](https://
 
 ### 2. Install the GitHub Copilot app modernization Extension
 
-1. Download the GitHub Copilot app modernization extension (VSIX file) from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/python-bugbash-2025-11-10)
+1. Download the GitHub Copilot app modernization extension (VSIX file) from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/1.7.2025111001-bugbash)
 
 2. Install the VSIX file in Visual Studio Code:
    - Open Visual Studio Code
@@ -138,18 +138,13 @@ cp .env.example .env
 ```env
 # Azure OpenAI configuration
 AZURE_OPENAI_ENDPOINT=https://<your-resource-name>.openai.azure.com/
+AZURE_OPENAI_API_KEY=<your-api-key>
 AZURE_OPENAI_API_VERSION=2025-03-01-preview
 AZURE_OPENAI_CHAT_DEPLOYMENT_NAME=gpt-4o-2024-11-20
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=text-embedding-ada-002
 
 # Agent Framework configuration
 A2A_SERVER_URL=http://localhost:9999
-```
-
-3. **Authenticate with Azure**: Log in to your Azure subscription using Azure CLI:
-
-```bash
-az login
 ```
 
 ### Activate the Environment
