@@ -19,7 +19,7 @@ Before starting this workshop, ensure you have:
 - A GitHub account with [GitHub Copilot](https://github.com/features/copilot) enabled (Pro, Pro+, Business, or Enterprise plan required)
 - [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
-- GitHub Copilot app modernization extension with Python migration enabled (use Pre-Release version)
+- Download GitHub Copilot app modernization extension with Python migration enabled from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/python-bugbash-2025-11-10)
 - Python version 3.13 (verify with `python --version`). 
   - Install from [Microsoft Store](https://apps.microsoft.com/detail/9pnrbtzxmb4z)
   - Install from [Python.org](https://www.python.org/downloads/release/python-3139/)
@@ -41,25 +41,21 @@ For detailed setup instructions, see [Set up GitHub Copilot in VS Code](https://
 
 ### 2. Install the GitHub Copilot app modernization Extension
 
-Install GitHub Copilot app modernization extension:
+1. Download the GitHub Copilot app modernization extension (VSIX file) from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/python-bugbash-2025-11-10)
 
-1. In Visual Studio Code, open the Extensions view from the Activity Bar.
-2. Search for **GitHub Copilot app modernization** in the marketplace.
-3. Select the extension and click **Install**.
-5. Restart Visual Studio Code.
-
-Enable the Pre-Released version for Python migration:
-1. Open the Extensions view
-2. Under **Installed** extensions, select "GitHub Copilot app modernization"
-4. Select **Switch to Pre-Release Version** and enable **Auto Update**
-5. Verify the version is `1.7.2025110601` or above (The version format is `<major>.<minor>.<date><build>`).
-5. Click "Restart Extension" to apply changes
-
-![Screenshot](./resources/install_extension.png)
+2. Install the VSIX file in Visual Studio Code:
+   - Open Visual Studio Code
+   - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) to open the Command Palette
+   - Type "Extensions: Install from VSIX..." and select it
+   - Browse to the downloaded VSIX file and select it
+   - Wait for the installation to complete
+   - Restart Visual Studio Code
 
 Pick up the minimal toolset:
 
 ![Screenshot](./resources/toolset.png)
+
+> ⚠️ **Important**: Do NOT click "Update" for the newly installed extension, as this will replace the private build with a public version that may not have the Python migration features.
 
 ### 3. Clone the Workshop Repository
 
