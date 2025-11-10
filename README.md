@@ -20,7 +20,10 @@ Before starting this workshop, ensure you have:
 - [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
 - GitHub Copilot app modernization extension with Python migration enabled (use Pre-Release version)
-- [Python](https://apps.microsoft.com/detail/9pnrbtzxmb4z) version 3.13 (verify with `python --version`). 
+- Python version 3.13 (verify with `python --version`). 
+  - Install from [Microsoft Store](https://apps.microsoft.com/detail/9pnrbtzxmb4z)
+  - Install from [Python.org](https://www.python.org/downloads/release/python-3139/)
+- [Python extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python) (recommended)
 
 In Visual Studio Code settings, ensure `chat.extensionTools.enabled` is set to `true`. This setting might be controlled by your organization's policy.
 
@@ -53,6 +56,10 @@ Enable the Pre-Released version for Python migration:
 5. Click "Restart Extension" to apply changes
 
 ![Screenshot](./resources/install_extension.png)
+
+Pick up the minimal tools set:
+
+![Screenshot](./resources/toolset.png)
 
 ### 3. Clone the Workshop Repository
 
