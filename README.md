@@ -57,7 +57,7 @@ Enable the Pre-Released version for Python migration:
 
 ![Screenshot](./resources/install_extension.png)
 
-Pick up the minimal tools set:
+Pick up the minimal toolset:
 
 ![Screenshot](./resources/toolset.png)
 
