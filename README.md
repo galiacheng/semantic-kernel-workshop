@@ -137,13 +137,18 @@ cp .env.example .env
 ```env
 # Azure OpenAI configuration
 AZURE_OPENAI_ENDPOINT=https://<your-resource-name>.openai.azure.com/
-AZURE_OPENAI_API_KEY=<your-api-key>
 AZURE_OPENAI_API_VERSION=2025-03-01-preview
 AZURE_OPENAI_CHAT_DEPLOYMENT_NAME=gpt-4o-2024-11-20
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME=text-embedding-ada-002
 
 # Agent Framework configuration
 A2A_SERVER_URL=http://localhost:9999
+```
+
+3. **Authenticate with Azure**: Log in to your Azure subscription using Azure CLI:
+
+```bash
+az login
 ```
 
 ### Activate the Environment
