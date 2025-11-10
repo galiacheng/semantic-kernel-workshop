@@ -19,7 +19,7 @@ Before starting this workshop, ensure you have:
 - A GitHub account with [GitHub Copilot](https://github.com/features/copilot) enabled (Pro, Pro+, Business, or Enterprise plan required)
 - [Visual Studio Code](https://code.visualstudio.com/) version 1.101 or later
 - [GitHub Copilot extension](https://code.visualstudio.com/docs/copilot/overview) installed and configured in VS Code
-- Download GitHub Copilot app modernization extension with Python migration enabled from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/1.7.2025111001-bugbash)
+- Download GitHub Copilot app modernization extension with Python migration, see below links.
 - Python version 3.13 (verify with `python --version`). 
   - Install from [Microsoft Store](https://apps.microsoft.com/detail/9pnrbtzxmb4z)
   - Install from [Python.org](https://www.python.org/downloads/release/python-3139/)
@@ -42,7 +42,9 @@ For detailed setup instructions, see [Set up GitHub Copilot in VS Code](https://
 
 ### 2. Install the GitHub Copilot app modernization Extension
 
-1. Download the GitHub Copilot app modernization extension (VSIX file) from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/1.7.2025111001-bugbash)
+1. Download the GitHub Copilot app modernization extension (VSIX file) from [Python App Migration Bug Bash](https://github.com/devdiv-azure-service-dmitryr/azure-java-migration-copilot-vscode-extension/releases/tag/1.7.2025111001-bugbash)  
+   // NEW: Optional internal direct download link (requires appropriate access)  
+   **Optional direct download**: [SharePoint VSIX folder](https://microsoftapc.sharepoint.com/:f:/t/AppModernizationJavaonAzureBugBash/Eu2TPpv_nv1OvCxJ5Xs5SLUBF_nIMm3mRtv7A25iMGg_Mg?e=Wrzvff)
 
 2. Install the VSIX file in Visual Studio Code:
    - In the Visual Studio Code
