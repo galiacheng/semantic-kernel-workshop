@@ -4,7 +4,7 @@ This workshop guides you through the process of migrating Python applications fr
 
 ## Overview
 
-This repository contains sample applications built with Semantic Kernel that demonstrate AI-powered booking agents. The workshop will show you how to migrate these applications to use the modern Microsoft Agent Framework while maintaining the same functionality.
+This repository contains sample applications demonstrating AI-powered booking agents. Originally built with Semantic Kernel, these applications have been migrated to use the modern Microsoft Agent Framework while maintaining the same functionality.
 
 ### Sample Applications
 
@@ -86,7 +86,7 @@ cd semantic-kernel-workshop
 ### Step 2: Review the Migration Plan
 
 GitHub Copilot app modernization will analyze your Python project, including:
-- Files using Semantic Kernel APIs
+- Files using Agent Framework APIs (previously Semantic Kernel)
 - Project dependencies and Python version requirements
 - Code structure and patterns
 
@@ -95,7 +95,7 @@ GitHub Copilot app modernization will analyze your Python project, including:
 GitHub Copilot proceeds with the automated code transformation:
 
 1. **Knowledge Base Integration**: Fetches the latest migration patterns and best practices
-2. **Code Transformation**: Systematically converts Semantic Kernel code to Agent Framework
+2. **Code Transformation**: Systematically converts code to use Agent Framework
 3. **Validation Loop**: Continuously validates changes and fixes issues automatically
 
 You can monitor the progress in real-time by checking the `progress.md` file that updates throughout the process.

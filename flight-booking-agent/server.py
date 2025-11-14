@@ -45,8 +45,8 @@ def create_flight_booking_skill() -> AgentSkill:
 def create_agent_card() -> AgentCard:
     """Create and return the agent card configuration."""
     return AgentCard(
-        name="Semantic Kernel Flight Booking Agent",
-        description="An agent that helps users book flights using semantic kernel capabilities.",
+        name='Agent Framework Flight Booking Agent',
+        description='An agent that helps users book flights using Microsoft Agent Framework.',
         capabilities=AgentCapabilities(streaming=True),
         url=os.environ.get("A2A_SERVER_URL"),
         version="1.0.0",
@@ -74,7 +74,7 @@ def create_server() -> A2AStarletteApplication:
 
 def main() -> None:
     """Main entry point for the flight booking agent server."""
-    logger.info("Starting Semantic Kernel Flight Booking Agent Server.")
+    logger.info("Starting Agent Framework Flight Booking Agent Server.")
 
     server = create_server()
 
