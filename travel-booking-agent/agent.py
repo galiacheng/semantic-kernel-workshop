@@ -1,6 +1,7 @@
 import os
 import logging
 from uuid import uuid4
+from typing import Annotated
 
 import httpx
 import uvicorn
@@ -8,11 +9,9 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 
-from semantic_kernel.agents.chat_completion.chat_completion_agent import ChatCompletionAgent, ChatHistoryAgentThread
-from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-from semantic_kernel.contents.chat_message_content import ChatMessageContent
-from semantic_kernel.contents.chat_history import ChatHistory
-from semantic_kernel.functions.kernel_function_decorator import kernel_function
+from agent_framework import ChatAgent, AgentThread
+from agent_framework.azure import AzureOpenAIChatClient
+from azure.identity import DefaultAzureCredential
 
 from a2a.client import A2ACardResolver, A2AClient
 from a2a.types import MessageSendParams, SendMessageRequest
@@ -35,18 +34,14 @@ FLIGHT_BOOKING_AGENT_URL = os.getenv("A2A_SERVER_URL")
 app = FastAPI(title="Travel Booking Agent",
               description="A travel planning assistant with flight booking capabilities")
 
-# Global chat history store
-chat_history_store: dict[str, ChatHistory] = {}
+# Global thread store
+thread_store: dict[str, AgentThread] = {}
 
 
 class FlightBookingTool:
     """Tool for booking flights using the flight booking agent."""
 
-    @kernel_function(
-        description="Book a flight using the flight booking agent",
-        name="book_flight"
-    )
-    async def book_flight(self, user_input: str) -> str:
+    async def book_flight(self, user_input: Annotated[str, "The user's flight booking request"]) -> str:
         """
         Book a flight using the external flight booking agent.
 
@@ -88,36 +83,38 @@ class FlightBookingTool:
             return f"Sorry, I encountered an error while trying to book your flight: {str(e)}"
 
 
-def create_travel_agent() -> ChatCompletionAgent:
+def create_travel_agent() -> ChatAgent:
     """Create and configure the travel planning agent."""
-    return ChatCompletionAgent(
-        service=AzureChatCompletion(),
-        name="TravelPlanner",
+    # Create Azure OpenAI client
+    client = AzureOpenAIChatClient(
+        credential=DefaultAzureCredential()
+    )
+    
+    # Create tool instance
+    flight_tool = FlightBookingTool()
+    
+    # Create agent with tools
+    return client.create_agent(
         instructions=(
             "You are a helpful travel planning assistant. "
             "Use the provided tools to assist users with their travel plans. "
             "When users ask about flights, use the book_flight tool to help them."
         ),
-        plugins=[FlightBookingTool()]
+        tools=[flight_tool.book_flight]
     )
 
 
-def get_or_create_chat_history(context_id: str) -> ChatHistory:
-    """Get existing chat history or create a new one for the given context."""
-    chat_history = chat_history_store.get(context_id)
+def get_or_create_thread(context_id: str) -> AgentThread:
+    """Get existing thread or create a new one for the given context."""
+    thread = thread_store.get(context_id)
 
-    if chat_history is None:
-        chat_history = ChatHistory(
-            messages=[],
-            system_message=(
-                "You are a travel planning assistant. "
-                "Your task is to help the user with their travel plans, including booking flights."
-            )
-        )
-        chat_history_store[context_id] = chat_history
-        logger.info(f"Created new ChatHistory for context ID: {context_id}")
+    if thread is None:
+        # Let the agent create a new thread
+        thread = travel_planning_agent.get_new_thread()
+        thread_store[context_id] = thread
+        logger.info(f"Created new thread for context ID: {context_id}")
 
-    return chat_history
+    return thread
 
 
 # Initialize the travel agent
@@ -140,27 +137,15 @@ async def chat(user_input: str = Form(...), context_id: str = Form("default")):
         f"Received chat request: {user_input} with context ID: {context_id}")
 
     try:
-        # Get or create chat history for the context
-        chat_history = get_or_create_chat_history(context_id)
-
-        # Add user input to chat history
-        chat_history.messages.append(
-            ChatMessageContent(role="user", content=user_input))
-
-        # Create a new thread from the chat history
-        thread = ChatHistoryAgentThread(
-            chat_history=chat_history, thread_id=str(uuid4()))
+        # Get or create thread for the context
+        thread = get_or_create_thread(context_id)
 
         # Get response from the agent
-        response = await travel_planning_agent.get_response(message=user_input, thread=thread)
+        response = await travel_planning_agent.run(user_input, thread=thread)
 
-        # Add assistant response to chat history
-        chat_history.messages.append(ChatMessageContent(
-            role="assistant", content=response.content.content))
+        logger.info(f"Travel agent response: {response.text}")
 
-        logger.info(f"Travel agent response: {response.content.content}")
-
-        return {"response": response.content.content}
+        return {"response": response.text}
 
     except Exception as e:
         logger.error(f"Error processing chat request: {e}")

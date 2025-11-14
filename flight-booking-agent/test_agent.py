@@ -2,9 +2,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock, patch, PropertyMock
 from uuid import uuid4
 
-from semantic_kernel.contents.chat_message_content import ChatMessageContent
-from semantic_kernel.contents.chat_history import ChatHistory
-from semantic_kernel.connectors.ai.chat_completion_client_base import ChatCompletionClientBase
+from agent_framework import ChatAgent, AgentThread, AgentRunResponse
 
 from agent import SemanticKernelFlightBookingAgent
 from agent_executor import SemanticKernelFlightBookingAgentExecutor
@@ -16,34 +14,33 @@ class TestSemanticKernelFlightBookingAgent:
     @pytest.fixture
     def mock_chat_agent(self):
         """Create a mock chat agent."""
-        mock_agent = MagicMock()
-        mock_agent.name = "FlightBookingAssistant"
-        mock_agent.get_response = AsyncMock()
+        mock_agent = MagicMock(spec=ChatAgent)
+        mock_agent.run = AsyncMock()
+        mock_agent.get_new_thread = MagicMock()
         return mock_agent
 
     @pytest.fixture
     def agent(self, mock_chat_agent):
         """Create a flight booking agent instance for testing."""
-        mock_service = MagicMock(spec=ChatCompletionClientBase)
-        mock_service.service_id = "test_service"
-        with patch('agent.AzureChatCompletion', return_value=mock_service):
-            with patch('agent.ChatCompletionAgent', return_value=mock_chat_agent):
+        mock_client = MagicMock()
+        mock_client.create_agent = MagicMock(return_value=mock_chat_agent)
+        with patch('agent.AzureOpenAIChatClient', return_value=mock_client):
+            with patch('agent.DefaultAzureCredential'):
                 return SemanticKernelFlightBookingAgent()
 
     @pytest.fixture
     def mock_response(self):
         """Create a mock response from the chat agent."""
-        mock_resp = MagicMock()
-        mock_resp.content.content = "I'd be happy to help you book a flight. Where would you like to fly from?"
+        mock_resp = MagicMock(spec=AgentRunResponse)
+        mock_resp.text = "I'd be happy to help you book a flight. Where would you like to fly from?"
         return mock_resp
 
     @pytest.mark.asyncio
     async def test_initialization(self, agent):
         """Test that the agent initializes correctly."""
         assert agent.chat_agent is not None
-        assert agent.chat_agent.name == "FlightBookingAssistant"
-        assert isinstance(agent.history_store, dict)
-        assert len(agent.history_store) == 0
+        assert isinstance(agent.thread_store, dict)
+        assert len(agent.thread_store) == 0
 
     @pytest.mark.asyncio
     async def test_book_flight_success(self, agent, mock_response):
@@ -51,12 +48,15 @@ class TestSemanticKernelFlightBookingAgent:
         context_id = str(uuid4())
         user_input = "I want to book a flight from Seattle to New York"
 
-        agent.chat_agent.get_response.return_value = mock_response
+        # Mock thread creation
+        mock_thread = MagicMock(spec=AgentThread)
+        agent.chat_agent.get_new_thread.return_value = mock_thread
+        agent.chat_agent.run.return_value = mock_response
+        
         response = await agent.book_flight(user_input, context_id)
 
-        assert response == mock_response.content.content
-        assert context_id in agent.history_store
-        assert len(agent.history_store[context_id].messages) == 3  # System + User + Assistant
+        assert response == mock_response.text
+        assert context_id in agent.thread_store
 
     @pytest.mark.asyncio
     async def test_book_flight_empty_input(self, agent):
@@ -81,27 +81,37 @@ class TestSemanticKernelFlightBookingAgent:
         user_input_1 = "I want to book a flight"
         user_input_2 = "From Seattle to New York"
 
-        agent.chat_agent.get_response.return_value = mock_response
+        # Mock thread creation
+        mock_thread = MagicMock(spec=AgentThread)
+        agent.chat_agent.get_new_thread.return_value = mock_thread
+        agent.chat_agent.run.return_value = mock_response
+        
         await agent.book_flight(user_input_1, context_id)
         await agent.book_flight(user_input_2, context_id)
 
-        # Should have 5 messages: 1 system + 2 user + 2 assistant
-        assert len(agent.history_store[context_id].messages) == 5
+        # Thread should be reused for same context
+        assert context_id in agent.thread_store
+        assert agent.chat_agent.run.call_count == 2
 
     @pytest.mark.asyncio
     async def test_book_flight_different_contexts(self, agent, mock_response):
-        """Test that different context IDs maintain separate histories."""
+        """Test that different context IDs maintain separate threads."""
         context_id_1 = str(uuid4())
         context_id_2 = str(uuid4())
 
-        agent.chat_agent.get_response.return_value = mock_response
+        # Mock thread creation
+        mock_thread_1 = MagicMock(spec=AgentThread)
+        mock_thread_2 = MagicMock(spec=AgentThread)
+        agent.chat_agent.get_new_thread.side_effect = [mock_thread_1, mock_thread_2]
+        agent.chat_agent.run.return_value = mock_response
+        
         await agent.book_flight("Book flight from Seattle", context_id_1)
         await agent.book_flight("Book flight from Boston", context_id_2)
 
-        assert context_id_1 in agent.history_store
-        assert context_id_2 in agent.history_store
-        assert len(agent.history_store[context_id_1].messages) == 3  # System + User + Assistant
-        assert len(agent.history_store[context_id_2].messages) == 3  # System + User + Assistant
+        assert context_id_1 in agent.thread_store
+        assert context_id_2 in agent.thread_store
+        assert agent.thread_store[context_id_1] is mock_thread_1
+        assert agent.thread_store[context_id_2] is mock_thread_2
 
     @pytest.mark.asyncio
     async def test_book_flight_error_handling(self, agent):
@@ -109,41 +119,47 @@ class TestSemanticKernelFlightBookingAgent:
         context_id = str(uuid4())
         user_input = "Book a flight"
 
-        agent.chat_agent.get_response.side_effect = Exception("API Error")
+        # Mock thread creation
+        mock_thread = MagicMock(spec=AgentThread)
+        agent.chat_agent.get_new_thread.return_value = mock_thread
+        agent.chat_agent.run.side_effect = Exception("API Error")
+        
         response = await agent.book_flight(user_input, context_id)
 
         assert "error" in response.lower()
         assert "API Error" in response
 
     @pytest.mark.asyncio
-    async def test_get_or_create_chat_history_creates_new(self, agent):
-        """Test that _get_or_create_chat_history creates a new history."""
+    async def test_get_or_create_thread_creates_new(self, agent):
+        """Test that _get_or_create_thread creates a new thread."""
         context_id = str(uuid4())
 
-        chat_history = agent._get_or_create_chat_history(context_id)
+        # Mock thread creation
+        mock_thread = MagicMock(spec=AgentThread)
+        agent.chat_agent.get_new_thread.return_value = mock_thread
+        
+        thread = agent._get_or_create_thread(context_id)
 
-        assert isinstance(chat_history, ChatHistory)
-        assert context_id in agent.history_store
-        # Chat history starts with a system message
-        assert len(chat_history.messages) == 1
-        assert chat_history.messages[0].role.value == "system"
+        assert isinstance(thread, MagicMock)
+        assert context_id in agent.thread_store
+        agent.chat_agent.get_new_thread.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_get_or_create_chat_history_returns_existing(self, agent):
-        """Test that _get_or_create_chat_history returns existing history."""
+    async def test_get_or_create_thread_returns_existing(self, agent):
+        """Test that _get_or_create_thread returns existing thread."""
         context_id = str(uuid4())
 
-        # Create initial history
-        chat_history_1 = agent._get_or_create_chat_history(context_id)
-        chat_history_1.messages.append(
-            ChatMessageContent(role="user", content="Test message"))
+        # Create initial thread
+        mock_thread = MagicMock(spec=AgentThread)
+        agent.chat_agent.get_new_thread.return_value = mock_thread
+        thread_1 = agent._get_or_create_thread(context_id)
 
-        # Retrieve the same history
-        chat_history_2 = agent._get_or_create_chat_history(context_id)
+        # Retrieve the same thread
+        thread_2 = agent._get_or_create_thread(context_id)
 
-        assert chat_history_1 is chat_history_2
-        # System message + user message
-        assert len(chat_history_2.messages) == 2
+        assert thread_1 is thread_2
+        # get_new_thread should only be called once
+        agent.chat_agent.get_new_thread.assert_called_once()
 
 
 class TestSemanticKernelFlightBookingAgentExecutor:

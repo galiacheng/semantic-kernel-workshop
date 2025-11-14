@@ -5,6 +5,7 @@ python-multipart>=0.0.9
 requests>=2.32.3
 uvicorn>=0.35.0
 a2a-sdk[http-server]>=0.1.0
-semantic-kernel==1.31.0
+agent-framework
+azure-identity
 pytest>=8.0.0
 pytest-asyncio>=0.23.0
