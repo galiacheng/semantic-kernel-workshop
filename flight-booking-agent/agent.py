@@ -1,19 +1,17 @@
-import os
 import logging
-from uuid import uuid4
 
 from dotenv import load_dotenv
 
-from agent_framework import ChatAgent, AgentThread
+from agent_framework import AgentThread
 from agent_framework.azure import AzureOpenAIChatClient
 from azure.identity import DefaultAzureCredential
 
-load_dotenv('../.env')
+load_dotenv("../.env")
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -95,4 +93,4 @@ class SemanticKernelFlightBookingAgent:
 
         except Exception as e:
             logger.error(f"Error processing flight booking request: {e}")
-            return f"I apologize, but I encountered an error while processing your flight booking request: {str(e)}"
+            return f"I apologize, but I encountered an error while processing your flight booking request: {e!s}"

@@ -16,12 +16,12 @@ from azure.identity import DefaultAzureCredential
 from a2a.client import A2ACardResolver, A2AClient
 from a2a.types import MessageSendParams, SendMessageRequest
 
-load_dotenv('../.env')
+load_dotenv("../.env")
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -73,14 +73,14 @@ class FlightBookingTool:
                 )
 
                 response = await client.send_message(request)
-                result = response.model_dump(mode='json', exclude_none=True)
+                result = response.model_dump(mode="json", exclude_none=True)
 
                 logger.info(f"Flight booking tool response: {result}")
                 return result["result"]["parts"][0]["text"]
 
         except Exception as e:
             logger.error(f"Error booking flight: {e}")
-            return f"Sorry, I encountered an error while trying to book your flight: {str(e)}"
+            return f"Sorry, I encountered an error while trying to book your flight: {e!s}"
 
 
 def create_travel_agent() -> ChatAgent:
@@ -89,10 +89,10 @@ def create_travel_agent() -> ChatAgent:
     client = AzureOpenAIChatClient(
         credential=DefaultAzureCredential()
     )
-    
+
     # Create tool instance
     flight_tool = FlightBookingTool()
-    
+
     # Create agent with tools
     return client.create_agent(
         instructions=(
@@ -157,8 +157,8 @@ async def index(request: Request):
     """Serve the main HTML interface."""
     try:
         html_path = os.path.join(os.path.dirname(__file__), "index.html")
-        print(html_path)
-        with open(html_path, "r", encoding="utf-8") as f:
+        logger.info(f"Loading HTML from: {html_path}")
+        with open(html_path, "r", encoding="utf-8") as f:  # noqa: ASYNC230
             html_content = f.read()
         return HTMLResponse(content=html_content)
     except FileNotFoundError:
@@ -176,5 +176,5 @@ def main() -> None:
     uvicorn.run(app, host=SERVER_HOST, port=SERVER_PORT)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

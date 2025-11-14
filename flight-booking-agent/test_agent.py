@@ -24,9 +24,9 @@ class TestSemanticKernelFlightBookingAgent:
         """Create a flight booking agent instance for testing."""
         mock_client = MagicMock()
         mock_client.create_agent = MagicMock(return_value=mock_chat_agent)
-        with patch('agent.AzureOpenAIChatClient', return_value=mock_client):
-            with patch('agent.DefaultAzureCredential'):
-                return SemanticKernelFlightBookingAgent()
+        with patch("agent.AzureOpenAIChatClient", return_value=mock_client), \
+             patch("agent.DefaultAzureCredential"):
+            return SemanticKernelFlightBookingAgent()
 
     @pytest.fixture
     def mock_response(self):
@@ -52,7 +52,7 @@ class TestSemanticKernelFlightBookingAgent:
         mock_thread = MagicMock(spec=AgentThread)
         agent.chat_agent.get_new_thread.return_value = mock_thread
         agent.chat_agent.run.return_value = mock_response
-        
+
         response = await agent.book_flight(user_input, context_id)
 
         assert response == mock_response.text
@@ -85,7 +85,7 @@ class TestSemanticKernelFlightBookingAgent:
         mock_thread = MagicMock(spec=AgentThread)
         agent.chat_agent.get_new_thread.return_value = mock_thread
         agent.chat_agent.run.return_value = mock_response
-        
+
         await agent.book_flight(user_input_1, context_id)
         await agent.book_flight(user_input_2, context_id)
 
@@ -104,7 +104,7 @@ class TestSemanticKernelFlightBookingAgent:
         mock_thread_2 = MagicMock(spec=AgentThread)
         agent.chat_agent.get_new_thread.side_effect = [mock_thread_1, mock_thread_2]
         agent.chat_agent.run.return_value = mock_response
-        
+
         await agent.book_flight("Book flight from Seattle", context_id_1)
         await agent.book_flight("Book flight from Boston", context_id_2)
 
@@ -123,7 +123,7 @@ class TestSemanticKernelFlightBookingAgent:
         mock_thread = MagicMock(spec=AgentThread)
         agent.chat_agent.get_new_thread.return_value = mock_thread
         agent.chat_agent.run.side_effect = Exception("API Error")
-        
+
         response = await agent.book_flight(user_input, context_id)
 
         assert "error" in response.lower()
@@ -137,7 +137,7 @@ class TestSemanticKernelFlightBookingAgent:
         # Mock thread creation
         mock_thread = MagicMock(spec=AgentThread)
         agent.chat_agent.get_new_thread.return_value = mock_thread
-        
+
         thread = agent._get_or_create_thread(context_id)
 
         assert isinstance(thread, MagicMock)
@@ -168,7 +168,7 @@ class TestSemanticKernelFlightBookingAgentExecutor:
     @pytest.fixture
     def executor(self):
         """Create an executor instance for testing."""
-        with patch('agent_executor.SemanticKernelFlightBookingAgent'):
+        with patch("agent_executor.SemanticKernelFlightBookingAgent"):
             return SemanticKernelFlightBookingAgentExecutor()
 
     @pytest.fixture
@@ -178,20 +178,20 @@ class TestSemanticKernelFlightBookingAgentExecutor:
         context.get_user_input.return_value = "I want to book a flight"
         context.current_task = None
         context.context_id = str(uuid4())
-        
+
         # Create a proper mock message with required attributes
         mock_message = MagicMock()
         mock_message.role = "user"
         mock_message.task_id = str(uuid4())
         mock_message.context_id = str(uuid4())
-        
+
         # Mock parts with proper structure
         mock_part = MagicMock()
         mock_text_part = MagicMock()
         mock_text_part.text = "I want to book a flight"
         type(mock_part).root = PropertyMock(return_value=mock_text_part)
         mock_message.parts = [mock_part]
-        
+
         context.message = mock_message
         return context
 
@@ -213,11 +213,11 @@ class TestSemanticKernelFlightBookingAgentExecutor:
         executor.agent.book_flight = AsyncMock(
             return_value="Flight booking confirmed!")
 
-        with patch('agent_executor.new_task') as mock_new_task:
+        with patch("agent_executor.new_task") as mock_new_task:
             mock_task = MagicMock()
             mock_task.id = str(uuid4())
             mock_new_task.return_value = mock_task
-            
+
             await executor.execute(mock_context, mock_event_queue)
 
         executor.agent.book_flight.assert_called_once_with(
@@ -243,11 +243,11 @@ class TestSemanticKernelFlightBookingAgentExecutor:
         executor.agent.book_flight = AsyncMock(
             side_effect=ValueError("Missing departure city"))
 
-        with patch('agent_executor.new_task') as mock_new_task:
+        with patch("agent_executor.new_task") as mock_new_task:
             mock_task = MagicMock()
             mock_task.id = str(uuid4())
             mock_new_task.return_value = mock_task
-            
+
             await executor.execute(mock_context, mock_event_queue)
 
         # Should enqueue error message
@@ -259,11 +259,11 @@ class TestSemanticKernelFlightBookingAgentExecutor:
         executor.agent.book_flight = AsyncMock(
             side_effect=Exception("Unexpected error"))
 
-        with patch('agent_executor.new_task') as mock_new_task:
+        with patch("agent_executor.new_task") as mock_new_task:
             mock_task = MagicMock()
             mock_task.id = str(uuid4())
             mock_new_task.return_value = mock_task
-            
+
             await executor.execute(mock_context, mock_event_queue)
 
         # Should enqueue error message

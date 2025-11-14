@@ -56,7 +56,7 @@ class SemanticKernelFlightBookingAgentExecutor(AgentExecutor):
             logger.error(f"Validation error during flight booking: {ve}")
             await event_queue.enqueue_event(
                 new_agent_text_message(
-                    f"I need more information to help you book a flight: {str(ve)}")
+                    f"I need more information to help you book a flight: {ve!s}")
             )
 
         except Exception as e:
@@ -87,4 +87,4 @@ class SemanticKernelFlightBookingAgentExecutor(AgentExecutor):
         logger.warning(
             "Cancel operation requested but not supported for flight booking agent.")
         raise Exception(
-            'Cancel operation not supported for flight booking operations.')
+            "Cancel operation not supported for flight booking operations.")
