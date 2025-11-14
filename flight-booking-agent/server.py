@@ -45,8 +45,8 @@ def create_flight_booking_skill() -> AgentSkill:
 def create_agent_card() -> AgentCard:
     """Create and return the agent card configuration."""
     return AgentCard(
-        name='Agent Framework Flight Booking Agent',
-        description='An agent that helps users book flights using Microsoft Agent Framework.',
+        name="Agent Framework Flight Booking Agent",
+        description="An agent that helps users book flights using Microsoft Agent Framework.",
         capabilities=AgentCapabilities(streaming=True),
         url=os.environ.get("A2A_SERVER_URL"),
         version="1.0.0",
